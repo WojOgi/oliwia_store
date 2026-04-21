@@ -1,1 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oliwia's Crochet Corner 🧶</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --lavender:    #b39ddb;
+      --purple:      #7e57c2;
+      --deep-purple: #4a2d82;
+      --sky:         #90caf9;
+      --blue:        #5c9ee6;
+      --white:       #ffffff;
+      --cream:       #f3eeff;
+      --card-bg:     #ffffffdd;
+      --text:        #3a1f6e;
+      --text-light:  #7b5ea7;
+      --accent:      #e040fb;
+      --star:        #ffe082;
+    }
 
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ─── Animated gradient background ─── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg,
+        #e8d5ff 0%,
+        #d0e8ff 30%,
+        #ffe8f5 55%,
+        #d8eaff 75%,
+        #ecdeff 100%);
+      background-size: 400% 400%;
+      animation: bgShift 14s ease infinite;
+      z-index: -2;
+    }
+    @keyframes bgShift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* ─── Floating yarn balls decoration ─── */
+    .floaters {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      overflow: hidden;
+    }
+    .yarn {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.13;
+      animation: float linear infinite;
+    }
+    @keyframes float {
+      0%   { transform: translateY(110vh) rotate(0deg); }
+      100% { transform: translateY(-20vh) rotate(720deg); }
+    }
+
+    /* ─── Header / Hero ─── */
+    header {
+      text-align: center;
+      padding: 60px 20px 40px;
+      position: relative;
+    }
+    .logo-yarn {
+      font-size: 3.5rem;
+      display: block;
+      animation: spin 6s linear infinite;
+    }
+    @keyframes spin {
+      0%   { transform: rotate(-8deg); }
+      50%  { transform: rotate(8deg); }
+      100% { transform: rotate(-8deg); }
+    }
+    header h1 {
+      font-family: 'Pacifico', cursive;
+      font-size: clamp(2.2rem, 6vw, 4rem);
+      color: var(--deep-purple);
+      text-shadow: 3px 3px 0 var(--lavender), 6px 6px 0 #d0b8ff44;
+      margin: 10px 0 6px;
+      letter-spacing: 1px;
+    }
+    header p.tagline {
+      font-size: 1.15rem;
+      color: var(--text-light);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    /* ─── Stars strip ─── */
+    .stars-strip {
+      text-align: center;
+      font-size: 1.4rem;
+      letter-spacing: 6px;
+      color: var(--star);
+      padding: 8px 0 20px;
+      text-shadow: 0 0 8px #ffcc0288;
+    }
+
+    /* ─── Section label ─── */
+    .section-title {
+      text-align: center;
+      font-family: 'Pacifico', cursive;
+      font-size: 2rem;
+      color: var(--purple);
+      margin: 10px 0 30px;
+      position: relative;
+    }
+    .section-title::after {
+      content: '';
+      display: block;
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--blue), var(--lavender), var(--accent));
+      border-radius: 99px;
+      margin: 10px auto 0;
+    }
+
+    /* ─── Grid ─── */
+    .shop-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 28px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px 60px;
+    }
+
+    /* ─── Card ─── */
+    .card {
+      background: var(--card-bg);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 6px 24px #7e57c218, 0 2px 6px #b39ddb22;
+      border: 2px solid transparent;
+      transition: transform 0.28s cubic-bezier(.34,1.56,.64,1),
+                  box-shadow 0.28s ease,
+                  border-color 0.28s ease;
+      position: relative;
+      cursor: pointer;
+    }
+    .card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 18px 40px #7e57c230, 0 4px 12px #b39ddb33;
+      border-color: var(--lavender);
+    }
+    .card-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: linear-gradient(135deg, var(--purple), var(--blue));
+      color: white;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 99px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      box-shadow: 0 2px 8px #7e57c244;
+    }
+
+    .card-img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      display: block;
+      background: linear-gradient(135deg, #e8d5ff 0%, #d0e8ff 100%);
+    }
+    /* Placeholder shimmer when image missing */
+    .card-img[src$=".jpg"]:not([complete]),
+    .card-img.placeholder {
+      background: linear-gradient(110deg, #e8d5ff 30%, #d8eeff 50%, #e8d5ff 70%);
+      background-size: 200% 100%;
+      animation: shimmer 1.6s infinite;
+    }
+    @keyframes shimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    .card-img-wrapper {
+      position: relative;
+      overflow: hidden;
+    }
+    .card-img-wrapper::after {
+      content: '🧶';
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.5rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .card:hover .card-img-wrapper::after { opacity: 0.15; }
+
+    .card-body {
+      padding: 16px 18px 18px;
+    }
+    .card-name {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 5px;
+      line-height: 1.3;
+    }
+    .card-desc {
+      font-size: 0.85rem;
+      color: var(--text-light);
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .price {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--purple);
+      letter-spacing: -0.5px;
+    }
+    .price span {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-light);
+      margin-left: 2px;
+    }
+    .btn-order {
+      background: linear-gradient(135deg, var(--purple) 0%, var(--blue) 100%);
+      color: white;
+      border: none;
+      border-radius: 99px;
+      padding: 8px 18px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+      box-shadow: 0 3px 12px #7e57c233;
+    }
+    .btn-order:hover {
+      transform: scale(1.07);
+      box-shadow: 0 6px 18px #7e57c244;
+    }
+    .btn-order:active { transform: scale(0.96); }
+
+    /* ─── Modal ─── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #3a1f6e88;
+      backdrop-filter: blur(6px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: fadeIn 0.2s ease;
+    }
+    .modal-overlay.open { display: flex; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .modal {
+      background: white;
+      border-radius: 28px;
+      max-width: 460px;
+      width: 100%;
+      overflow: hidden;
+      box-shadow: 0 24px 60px #3a1f6e44;
+      animation: popIn 0.3s cubic-bezier(.34,1.56,.64,1);
+    }
+    @keyframes popIn {
+      from { transform: scale(0.7); opacity: 0; }
+      to   { transform: scale(1);   opacity: 1; }
+    }
+    .modal-img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      background: linear-gradient(135deg, #e8d5ff, #d0e8ff);
+      display: block;
+    }
+    .modal-body {
+      padding: 26px 28px 30px;
+    }
+    .modal-body h2 {
+      font-family: 'Pacifico', cursive;
+      font-size: 1.7rem;
+      color: var(--deep-purple);
+      margin-bottom: 8px;
+    }
+    .modal-body p {
+      color: var(--text-light);
+      line-height: 1.7;
+      margin-bottom: 20px;
+      font-size: 0.97rem;
+    }
+    .modal-price {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--purple);
+      margin-bottom: 20px;
+    }
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+    }
+    .btn-close {
+      background: var(--cream);
+      color: var(--text-light);
+      border: 2px solid var(--lavender);
+      border-radius: 99px;
+      padding: 10px 22px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+      flex: 1;
+    }
+    .btn-close:hover { background: #ede0ff; }
+    .btn-order-modal {
+      flex: 2;
+      background: linear-gradient(135deg, var(--purple) 0%, var(--blue) 100%);
+      color: white;
+      border: none;
+      border-radius: 99px;
+      padding: 10px 22px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 14px #7e57c233;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-order-modal:hover { transform: scale(1.04); box-shadow: 0 8px 24px #7e57c255; }
+
+    /* ─── Toast ─── */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--deep-purple);
+      color: white;
+      padding: 14px 28px;
+      border-radius: 99px;
+      font-weight: 700;
+      font-size: 1rem;
+      box-shadow: 0 8px 28px #3a1f6e55;
+      z-index: 2000;
+      transition: transform 0.4s cubic-bezier(.34,1.56,.64,1), opacity 0.3s;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+    /* ─── Footer ─── */
+    footer {
+      text-align: center;
+      padding: 40px 20px 50px;
+      color: var(--text-light);
+      font-size: 0.95rem;
+      font-weight: 700;
+      line-height: 2;
+    }
+    footer .heart { color: var(--accent); font-size: 1.1rem; }
+    footer .contact-info {
+      display: inline-block;
+      background: white;
+      border: 2px solid var(--lavender);
+      border-radius: 16px;
+      padding: 16px 30px;
+      margin-top: 14px;
+      color: var(--text);
+      font-size: 1rem;
+      box-shadow: 0 4px 16px #b39ddb22;
+    }
+    footer .contact-info strong { color: var(--purple); }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 500px) {
+      .shop-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; padding: 0 12px 40px; }
+      .card-body { padding: 10px 12px 13px; }
+      .card-name { font-size: 0.9rem; }
+      .price { font-size: 1.2rem; }
+      .btn-order { padding: 6px 12px; font-size: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Floating yarn balls -->
+<div class="floaters" id="floaters"></div>
+
+<!-- ── HEADER ── -->
+<header>
+  <span class="logo-yarn">🧶</span>
+  <h1>Oliwia's Crochet Corner</h1>
+  <p class="tagline">Handmade with love, one stitch at a time ✨</p>
+</header>
+
+<div class="stars-strip">★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★</div>
+
+<p class="section-title">My Creations</p>
+
+<!-- ── PRODUCT GRID ── -->
+<div class="shop-grid" id="shopGrid"></div>
+
+<!-- ── MODAL ── -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <img class="modal-img" id="modalImg" src="" alt="" />
+    <div class="modal-body">
+      <h2 id="modalName"></h2>
+      <p id="modalDesc"></p>
+      <div class="modal-price" id="modalPrice"></div>
+      <div class="modal-actions">
+        <button class="btn-close" onclick="closeModal()">← Back</button>
+        <button class="btn-order-modal" onclick="orderItem()">🛍️ I Want This!</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── TOAST ── -->
+<div class="toast" id="toast"></div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div>All items are <strong>handmade by Oliwia</strong> 🧸<br/>
+  Payment in <strong>cash (SAR)</strong> upon pickup</div>
+  <div class="contact-info">
+    📱 To order, contact us at:<br/>
+    <strong>+966 — — — — — — —</strong><br/>
+    <small>We'll arrange pickup & payment</small>
+  </div>
+  <br/>
+  <span class="heart">♥</span> Made with yarn &amp; joy · Thuwal, Saudi Arabia
+</footer>
+
+<script>
+  // ── Product data (20 items) ──
+  const products = [
+    { id: 1,  name: "Bunny Plushie",        desc: "A soft fluffy bunny with floppy ears. Perfect cuddle buddy!",          price: 10, img: "image1.jpg",  badge: "New" },
+    { id: 2,  name: "Strawberry Amigurumi",  desc: "Cute strawberry plushie, red with little seeds. Super kawaii!",        price: 15, img: "image2.jpg",  badge: null },
+    { id: 3,  name: "Rainbow Bear",          desc: "A cheerful teddy bear in rainbow colours. Hugs included!",             price: 20, img: "image3.jpg",  badge: "Fave ⭐" },
+    { id: 4,  name: "Mini Cactus",           desc: "Tiny crochet cactus in a little pot. It never needs watering!",        price: 10, img: "image4.jpg",  badge: null },
+    { id: 5,  name: "Ocean Turtle",          desc: "A chubby sea turtle with a detailed shell. Swim away!",                price: 18, img: "image5.jpg",  badge: null },
+    { id: 6,  name: "Lavender Cat",          desc: "Lilac kitty with a sweet smile and curly tail.",                       price: 15, img: "image6.jpg",  badge: null },
+    { id: 7,  name: "Cloud Puff",            desc: "Fluffy white cloud keychain to hang anywhere you like.",               price: 10, img: "image7.jpg",  badge: null },
+    { id: 8,  name: "Dino Egg",             desc: "A baby dinosaur hatching from a crocheted egg. Roar! 🦕",              price: 20, img: "image8.jpg",  badge: "Rare" },
+    { id: 9,  name: "Sleepy Owl",            desc: "A wise little owl with half-closed eyes ready for a nap.",             price: 15, img: "image9.jpg",  badge: null },
+    { id: 10, name: "Honey Bee",             desc: "Buzzy yellow and black bee with tiny wings. Bee happy!",               price: 12, img: "image10.jpg", badge: null },
+    { id: 11, name: "Starfish Pillow",       desc: "Mini star-shaped pillow in ocean blue. Perfect for beds!",             price: 25, img: "image11.jpg", badge: null },
+    { id: 12, name: "Purple Unicorn",        desc: "Magical unicorn with a glittery horn and flowing mane.",               price: 30, img: "image12.jpg", badge: "Popular 💜" },
+    { id: 13, name: "Flower Brooch",         desc: "Wearable crochet flower to pin on bags or clothes.",                   price: 10, img: "image13.jpg", badge: null },
+    { id: 14, name: "Penguin Chick",         desc: "A waddling penguin in a little striped scarf. Too cute!",              price: 15, img: "image14.jpg", badge: null },
+    { id: 15, name: "Cupcake Charm",         desc: "A sweet cupcake plushie with sprinkles on top. Yum!",                  price: 10, img: "image15.jpg", badge: null },
+    { id: 16, name: "Blue Elephant",         desc: "Chunky elephant with big ears and a curly trunk.",                     price: 20, img: "image16.jpg", badge: null },
+    { id: 17, name: "Moon & Stars Set",      desc: "Crescent moon plus two little stars — a dreamy trio.",                 price: 22, img: "image17.jpg", badge: "Set 🌙" },
+    { id: 18, name: "Frog Prince",           desc: "A tiny frog sitting on a lilypad. Kiss him maybe?",                    price: 15, img: "image18.jpg", badge: null },
+    { id: 19, name: "Cherry Keychain",       desc: "Pair of red cherries on a green stem. So kawaii!",                     price: 10, img: "image19.jpg", badge: null },
+    { id: 20, name: "Magic Mushroom",        desc: "Red toadstool with white dots. A lucky charm for your room!",          price: 12, img: "image20.jpg", badge: null },
+  ];
+
+  let currentProduct = null;
+
+  // ── Render grid ──
+  const grid = document.getElementById('shopGrid');
+  products.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      ${p.badge ? `<div class="card-badge">${p.badge}</div>` : ''}
+      <div class="card-img-wrapper">
+        <img class="card-img" src="${p.img}" alt="${p.name}" onerror="this.style.minHeight='200px'" />
+      </div>
+      <div class="card-body">
+        <div class="card-name">${p.name}</div>
+        <div class="card-desc">${p.desc}</div>
+        <div class="card-footer">
+          <div class="price">${p.price} <span>SAR</span></div>
+          <button class="btn-order" onclick="openModal(${p.id})">Order 🛍️</button>
+        </div>
+      </div>`;
+    grid.appendChild(card);
+  });
+
+  // ── Modal ──
+  function openModal(id) {
+    currentProduct = products.find(p => p.id === id);
+    document.getElementById('modalImg').src   = currentProduct.img;
+    document.getElementById('modalImg').alt   = currentProduct.name;
+    document.getElementById('modalName').textContent  = currentProduct.name;
+    document.getElementById('modalDesc').textContent  = currentProduct.desc;
+    document.getElementById('modalPrice').textContent = currentProduct.price + ' SAR';
+    document.getElementById('modalOverlay').classList.add('open');
+  }
+  function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('open');
+    currentProduct = null;
+  }
+  document.getElementById('modalOverlay').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeModal();
+  });
+
+  function orderItem() {
+    closeModal();
+    showToast(`✨ Great choice! Please contact us to order "${currentProduct ? currentProduct.name : 'this item'}"`);
+  }
+
+  // ── Toast ──
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3800);
+  }
+
+  // ── Floating yarn balls ──
+  const colors = ['#b39ddb','#90caf9','#ce93d8','#80cbc4','#f48fb1','#fff176'];
+  const container = document.getElementById('floaters');
+  for (let i = 0; i < 18; i++) {
+    const el = document.createElement('div');
+    const size = 40 + Math.random() * 120;
+    el.className = 'yarn';
+    el.style.cssText = `
+      width:${size}px; height:${size}px;
+      left:${Math.random()*100}%;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      animation-duration:${12 + Math.random()*18}s;
+      animation-delay:${-Math.random()*20}s;
+      opacity:${0.06 + Math.random()*0.12};
+    `;
+    container.appendChild(el);
+  }
+</script>
+</body>
+</html>
