@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Oliwia's Crochet Corner 🧶</title>
-  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;600;700;800&family=Cairo:wght@400;700;800;900&display=swap" rel="stylesheet" />
   <style>
     :root {
       --lavender:    #b39ddb;
@@ -28,6 +28,30 @@
       background: var(--cream);
       color: var(--text);
       overflow-x: hidden;
+    }
+
+    /* Arabic font override */
+    html[lang="ar"] body,
+    html[lang="ar"] .card-name,
+    html[lang="ar"] .card-desc,
+    html[lang="ar"] .btn-order,
+    html[lang="ar"] .btn-close,
+    html[lang="ar"] .btn-order-modal,
+    html[lang="ar"] .modal-body p,
+    html[lang="ar"] .tagline,
+    html[lang="ar"] footer,
+    html[lang="ar"] .toast,
+    html[lang="ar"] .card-badge {
+      font-family: 'Cairo', 'Nunito', sans-serif;
+    }
+    html[lang="ar"] header h1 {
+      font-family: 'Cairo', 'Pacifico', cursive;
+      font-weight: 900;
+    }
+    html[lang="ar"] .section-title,
+    html[lang="ar"] .modal-body h2 {
+      font-family: 'Cairo', 'Pacifico', cursive;
+      font-weight: 800;
     }
 
     /* ─── Animated gradient background ─── */
@@ -69,6 +93,43 @@
       0%   { transform: translateY(110vh) rotate(0deg); }
       100% { transform: translateY(-20vh) rotate(720deg); }
     }
+
+    /* ─── Language switcher ─── */
+    .lang-switcher {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      z-index: 100;
+      display: flex;
+      gap: 4px;
+      background: #ffffffdd;
+      backdrop-filter: blur(10px);
+      border: 2px solid var(--lavender);
+      border-radius: 99px;
+      padding: 4px;
+      box-shadow: 0 4px 16px #7e57c22a;
+    }
+    html[dir="rtl"] .lang-switcher { right: auto; left: 18px; }
+    .lang-btn {
+      background: transparent;
+      border: none;
+      border-radius: 99px;
+      padding: 6px 14px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--text-light);
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.5px;
+    }
+    .lang-btn:hover { color: var(--purple); }
+    .lang-btn.active {
+      background: linear-gradient(135deg, var(--purple), var(--blue));
+      color: white;
+      box-shadow: 0 2px 8px #7e57c244;
+    }
+    .lang-btn.ar-btn { font-family: 'Cairo', sans-serif; font-size: 0.95rem; }
 
     /* ─── Header / Hero ─── */
     header {
@@ -172,6 +233,7 @@
       text-transform: uppercase;
       box-shadow: 0 2px 8px #7e57c244;
     }
+    html[dir="rtl"] .card-badge { right: auto; left: 12px; }
 
     .card-img {
       width: 100%;
@@ -180,21 +242,7 @@
       display: block;
       background: linear-gradient(135deg, #e8d5ff 0%, #d0e8ff 100%);
     }
-    /* Placeholder shimmer when image missing */
-    .card-img[src$=".jpg"]:not([complete]),
-    .card-img.placeholder {
-      background: linear-gradient(110deg, #e8d5ff 30%, #d8eeff 50%, #e8d5ff 70%);
-      background-size: 200% 100%;
-      animation: shimmer 1.6s infinite;
-    }
-    @keyframes shimmer {
-      0%   { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
-    .card-img-wrapper {
-      position: relative;
-      overflow: hidden;
-    }
+    .card-img-wrapper { position: relative; overflow: hidden; }
     .card-img-wrapper::after {
       content: '🧶';
       position: absolute;
@@ -208,9 +256,7 @@
     }
     .card:hover .card-img-wrapper::after { opacity: 0.15; }
 
-    .card-body {
-      padding: 16px 18px 18px;
-    }
+    .card-body { padding: 16px 18px 18px; }
     .card-name {
       font-size: 1.05rem;
       font-weight: 800;
@@ -235,6 +281,9 @@
       font-weight: 800;
       color: var(--purple);
       letter-spacing: -0.5px;
+      /* Keep price number LTR even in RTL */
+      direction: ltr;
+      unicode-bidi: isolate;
     }
     .price span {
       font-size: 0.8rem;
@@ -297,9 +346,7 @@
       background: linear-gradient(135deg, #e8d5ff, #d0e8ff);
       display: block;
     }
-    .modal-body {
-      padding: 26px 28px 30px;
-    }
+    .modal-body { padding: 26px 28px 30px; }
     .modal-body h2 {
       font-family: 'Pacifico', cursive;
       font-size: 1.7rem;
@@ -317,11 +364,11 @@
       font-weight: 800;
       color: var(--purple);
       margin-bottom: 20px;
+      direction: ltr;
+      unicode-bidi: isolate;
     }
-    .modal-actions {
-      display: flex;
-      gap: 12px;
-    }
+    html[dir="rtl"] .modal-price { text-align: right; }
+    .modal-actions { display: flex; gap: 12px; }
     .btn-close {
       background: var(--cream);
       color: var(--text-light);
@@ -369,6 +416,8 @@
       transition: transform 0.4s cubic-bezier(.34,1.56,.64,1), opacity 0.3s;
       opacity: 0;
       pointer-events: none;
+      max-width: 90vw;
+      text-align: center;
     }
     .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
@@ -394,6 +443,7 @@
       box-shadow: 0 4px 16px #b39ddb22;
     }
     footer .contact-info strong { color: var(--purple); }
+    .phone-number { direction: ltr; unicode-bidi: isolate; display: inline-block; }
 
     /* ─── Responsive ─── */
     @media (max-width: 500px) {
@@ -402,6 +452,9 @@
       .card-name { font-size: 0.9rem; }
       .price { font-size: 1.2rem; }
       .btn-order { padding: 6px 12px; font-size: 0.8rem; }
+      .lang-switcher { top: 10px; right: 10px; padding: 3px; }
+      html[dir="rtl"] .lang-switcher { right: auto; left: 10px; }
+      .lang-btn { padding: 5px 10px; font-size: 0.75rem; }
     }
   </style>
 </head>
@@ -410,16 +463,23 @@
 <!-- Floating yarn balls -->
 <div class="floaters" id="floaters"></div>
 
+<!-- ── LANGUAGE SWITCHER ── -->
+<div class="lang-switcher">
+  <button class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
+  <button class="lang-btn" data-lang="pl" onclick="setLang('pl')">PL</button>
+  <button class="lang-btn ar-btn" data-lang="ar" onclick="setLang('ar')">ع</button>
+</div>
+
 <!-- ── HEADER ── -->
 <header>
   <span class="logo-yarn">🧶</span>
-  <h1>Oliwia's Crochet Corner</h1>
-  <p class="tagline">Handmade with love, one stitch at a time ✨</p>
+  <h1 id="siteTitle">Oliwia's Crochet Corner</h1>
+  <p class="tagline" id="siteTagline">Handmade with love, one stitch at a time ✨</p>
 </header>
 
 <div class="stars-strip">★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★</div>
 
-<p class="section-title">My Creations</p>
+<p class="section-title" id="sectionTitle">My Creations</p>
 
 <!-- ── PRODUCT GRID ── -->
 <div class="shop-grid" id="shopGrid"></div>
@@ -433,8 +493,8 @@
       <p id="modalDesc"></p>
       <div class="modal-price" id="modalPrice"></div>
       <div class="modal-actions">
-        <button class="btn-close" onclick="closeModal()">← Back</button>
-        <button class="btn-order-modal" onclick="orderItem()">🛍️ I Want This!</button>
+        <button class="btn-close" id="btnClose" onclick="closeModal()">← Back</button>
+        <button class="btn-order-modal" id="btnOrderModal" onclick="orderItem()">🛍️ I Want This!</button>
       </div>
     </div>
   </div>
@@ -444,71 +504,244 @@
 <div class="toast" id="toast"></div>
 
 <!-- ── FOOTER ── -->
-<footer>
-  <div>All items are <strong>handmade by Oliwia</strong> 🧸<br/>
+<footer id="footer">
+  <div id="footerTop">All items are <strong>handmade by Oliwia</strong> 🧸<br/>
   Payment in <strong>cash (SAR)</strong> upon pickup</div>
   <div class="contact-info">
-    📱 To order, contact us at:<br/>
-    <strong>+966 544 700 589</strong><br/>
-    <small>We'll arrange pickup & payment</small>
+    <span id="footerContactLabel">📱 To order, contact us at:</span><br/>
+    <strong class="phone-number">+966 544 700 589</strong><br/>
+    <small id="footerContactSmall">We'll arrange pickup &amp; payment</small>
   </div>
   <br/>
-  <span class="heart">♥</span> Made with yarn &amp; joy · Thuwal, Saudi Arabia
+  <span class="heart">♥</span> <span id="footerBottom">Made with yarn &amp; joy · Thuwal, Saudi Arabia</span>
 </footer>
 
 <script>
-  // ── Product data (20 items) ──
-  // — Product data (15 items) —
-const products = [
-  { id: 1,  name: "Mushroom with froghat",  desc: "A nice little mushroom with a froghat",  price: 10, img: "mushroomwithfroghat.jpeg", badge: "New" },
-  { id: 2,  name: "Watermelon Cat (red)",   desc: "A cute little red Watermelon cat",       price: 10, img: "watermeloncatred.jpeg",    badge: null },
-  { id: 3,  name: "Watermelon Cat (green)", desc: "A cheerful green Watermelon cat",        price: 10, img: "watermeloncatgreen.jpeg",  badge: "Fave ⭐" },
-  { id: 4,  name: "Calico Cat",             desc: "A cute colorful cat",                    price: 10, img: "calicocat.jpeg",           badge: null },
-  { id: 5,  name: "Gray and pink cat",      desc: "A cute gray and pink cat with a cute smile", price: 15, img: "grayandpinkcat.jpeg", badge: null },
-  { id: 6,  name: "Cute tiny cat",          desc: "A cute little tiny cat",                 price: 10, img: "cutetinycat.jpeg",         badge: null },
-  { id: 7,  name: "Colorful scrunchie",     desc: "A cheerful colorful scrunchie",          price: 10, img: "colorfulscrunchie.jpeg",   badge: null },
-  { id: 8,  name: "Colorful axolotl",       desc: "A cute colorful axolotl",                price: 10, img: "colorfulaxolotl.jpeg",     badge: null },
-  { id: 9,  name: "Purple scrunchie",       desc: "A soft purple scrunchie",                price: 10, img: "purplescrunchie.jpeg",     badge: null },
-  { id: 10, name: "White scrunchie",        desc: "A soft white scrunchie",                 price: 10, img: "whitescrunchie.jpeg",      badge: null },
-  { id: 11, name: "Brown scrunchie",        desc: "A soft brown scrunchie",                 price: 10, img: "brownscrunchie.jpeg",      badge: null },
-  { id: 12, name: "Black scrunchie",        desc: "A soft black scrunchie",                 price: 10, img: "blackscrunchie.jpeg",      badge: null },
-  { id: 13, name: "Purple tiny octopus",    desc: "A cute little purple octopus",           price: 10, img: "purplesmalloctopus.jpeg",  badge: null },
-  { id: 14, name: "White tiny octopus",     desc: "A cute little white octopus",            price: 10, img: "whitesmalloctopus.jpeg",   badge: null },
-  { id: 15, name: "Brown tiny octopus",     desc: "A cute little brown octopus",            price: 10, img: "brownsmalloctopus.jpeg",   badge: null },
-];
+  // ═══════════════════════════════════════════════════════
+  //  TRANSLATIONS
+  // ═══════════════════════════════════════════════════════
+  const i18n = {
+    en: {
+      title:           "Oliwia's Crochet Corner",
+      tagline:         "Handmade with love, one stitch at a time ✨",
+      sectionTitle:    "My Creations",
+      orderBtn:        "Order 🛍️",
+      backBtn:         "← Back",
+      wantBtn:         "🛍️ I Want This!",
+      toast:           (name) => `✨ Great choice! Please contact us to order "${name}"`,
+      toastFallback:   "this item",
+      sarSuffix:       "SAR",
+      badgeNew:        "New",
+      badgeFave:       "Fave ⭐",
+      footerHtml:      'All items are <strong>handmade by Oliwia</strong> 🧸<br/>Payment in <strong>cash (SAR)</strong> upon pickup',
+      footerContact:   "📱 To order, contact us at:",
+      footerSmall:     "We'll arrange pickup & payment",
+      footerBottom:    "Made with yarn &amp; joy · Thuwal, Saudi Arabia",
+    },
+    pl: {
+      title:           "Kącik Szydełkowy Oliwii",
+      tagline:         "Robione z miłością, oczko po oczku ✨",
+      sectionTitle:    "Moje Dzieła",
+      orderBtn:        "Zamów 🛍️",
+      backBtn:         "← Wstecz",
+      wantBtn:         "🛍️ Chcę To!",
+      toast:           (name) => `✨ Świetny wybór! Skontaktuj się z nami, aby zamówić „${name}"`,
+      toastFallback:   "ten produkt",
+      sarSuffix:       "SAR",
+      badgeNew:        "Nowość",
+      badgeFave:       "Ulubione ⭐",
+      footerHtml:      'Wszystkie rzeczy <strong>robione ręcznie przez Oliwię</strong> 🧸<br/>Płatność <strong>gotówką (SAR)</strong> przy odbiorze',
+      footerContact:   "📱 Aby zamówić, skontaktuj się z nami:",
+      footerSmall:     "Ustalimy odbiór i płatność",
+      footerBottom:    "Zrobione z włóczki i radości · Thuwal, Arabia Saudyjska",
+    },
+    ar: {
+      title:           "ركن أوليفيا للكروشيه",
+      tagline:         "✨ مصنوع يدويًا بحب، غرزة تلو الأخرى",
+      sectionTitle:    "إبداعاتي",
+      orderBtn:        "🛍️ اطلب",
+      backBtn:         "رجوع →",
+      wantBtn:         "🛍️ أريد هذا!",
+      toast:           (name) => `✨ اختيار رائع! يُرجى التواصل معنا لطلب "${name}"`,
+      toastFallback:   "هذه القطعة",
+      sarSuffix:       "ر.س",
+      badgeNew:        "جديد",
+      badgeFave:       "المفضلة ⭐",
+      footerHtml:      'جميع القطع <strong>مصنوعة يدويًا بواسطة أوليفيا</strong> 🧸<br/>الدفع <strong>نقدًا (ر.س)</strong> عند الاستلام',
+      footerContact:   "📱 للطلب، تواصل معنا على:",
+      footerSmall:     "سنُرتب الاستلام والدفع",
+      footerBottom:    "مصنوع بالغزل والفرح · ثول، المملكة العربية السعودية",
+    }
+  };
 
+  // ═══════════════════════════════════════════════════════
+  //  PRODUCTS — translations embedded per language
+  // ═══════════════════════════════════════════════════════
+  const products = [
+    { id: 1, price: 10, img: "mushroomwithfroghat.jpeg", badge: "new",
+      en: { name: "Mushroom with froghat",  desc: "A nice little mushroom with a froghat" },
+      pl: { name: "Grzybek z żabką",         desc: "Słodki grzybek w czapce żabki" },
+      ar: { name: "فطر بقبعة ضفدع",           desc: "فطر صغير لطيف بقبعة ضفدع" } },
+
+    { id: 2, price: 10, img: "watermeloncatred.jpeg", badge: null,
+      en: { name: "Watermelon Cat (red)",    desc: "A cute little red Watermelon cat" },
+      pl: { name: "Kotek-Arbuzek (czerwony)", desc: "Słodki czerwony kotek-arbuzek" },
+      ar: { name: "قطة البطيخ (حمراء)",        desc: "قطة بطيخ حمراء صغيرة ولطيفة" } },
+
+    { id: 3, price: 10, img: "watermeloncatgreen.jpeg", badge: "fave",
+      en: { name: "Watermelon Cat (green)",  desc: "A cheerful green Watermelon cat" },
+      pl: { name: "Kotek-Arbuzek (zielony)", desc: "Wesoły zielony kotek-arbuzek" },
+      ar: { name: "قطة البطيخ (خضراء)",       desc: "قطة بطيخ خضراء مرحة" } },
+
+    { id: 4, price: 10, img: "calicocat.jpeg", badge: null,
+      en: { name: "Calico Cat",              desc: "A cute colorful cat" },
+      pl: { name: "Kotek Łaciaty",           desc: "Słodki kolorowy kotek" },
+      ar: { name: "قطة ملونة",                desc: "قطة ملونة لطيفة" } },
+
+    { id: 5, price: 15, img: "grayandpinkcat.jpeg", badge: null,
+      en: { name: "Gray and pink cat",       desc: "A cute gray and pink cat with a cute smile" },
+      pl: { name: "Szaro-różowy kotek",      desc: "Słodki szaro-różowy kotek z uroczym uśmiechem" },
+      ar: { name: "قطة رمادية ووردية",        desc: "قطة رمادية ووردية لطيفة بابتسامة جميلة" } },
+
+    { id: 6, price: 10, img: "cutetinycat.jpeg", badge: null,
+      en: { name: "Cute tiny cat",           desc: "A cute little tiny cat" },
+      pl: { name: "Malutki kotek",           desc: "Słodki, malutki kotek" },
+      ar: { name: "قطة صغيرة لطيفة",          desc: "قطة صغيرة جدًا ولطيفة" } },
+
+    { id: 7, price: 10, img: "colorfulscrunchie.jpeg", badge: null,
+      en: { name: "Colorful scrunchie",      desc: "A cheerful colorful scrunchie" },
+      pl: { name: "Kolorowa gumka",          desc: "Wesoła, kolorowa gumka do włosów" },
+      ar: { name: "ربطة شعر ملونة",           desc: "ربطة شعر ملونة ومرحة" } },
+
+    { id: 8, price: 10, img: "colorfulaxolotl.jpeg", badge: null,
+      en: { name: "Colorful axolotl",        desc: "A cute colorful axolotl" },
+      pl: { name: "Kolorowy aksolotl",       desc: "Słodki, kolorowy aksolotl" },
+      ar: { name: "أكسولوتل ملون",            desc: "أكسولوتل ملون ولطيف" } },
+
+    { id: 9, price: 10, img: "purplescrunchie.jpeg", badge: null,
+      en: { name: "Purple scrunchie",        desc: "A soft purple scrunchie" },
+      pl: { name: "Fioletowa gumka",         desc: "Miękka, fioletowa gumka do włosów" },
+      ar: { name: "ربطة شعر بنفسجية",         desc: "ربطة شعر بنفسجية ناعمة" } },
+
+    { id: 10, price: 10, img: "whitescrunchie.jpeg", badge: null,
+      en: { name: "White scrunchie",         desc: "A soft white scrunchie" },
+      pl: { name: "Biała gumka",             desc: "Miękka, biała gumka do włosów" },
+      ar: { name: "ربطة شعر بيضاء",           desc: "ربطة شعر بيضاء ناعمة" } },
+
+    { id: 11, price: 10, img: "brownscrunchie.jpeg", badge: null,
+      en: { name: "Brown scrunchie",         desc: "A soft brown scrunchie" },
+      pl: { name: "Brązowa gumka",           desc: "Miękka, brązowa gumka do włosów" },
+      ar: { name: "ربطة شعر بنية",            desc: "ربطة شعر بنية ناعمة" } },
+
+    { id: 12, price: 10, img: "blackscrunchie.jpeg", badge: null,
+      en: { name: "Black scrunchie",         desc: "A soft black scrunchie" },
+      pl: { name: "Czarna gumka",            desc: "Miękka, czarna gumka do włosów" },
+      ar: { name: "ربطة شعر سوداء",           desc: "ربطة شعر سوداء ناعمة" } },
+
+    { id: 13, price: 10, img: "purplesmalloctopus.jpeg", badge: null,
+      en: { name: "Purple tiny octopus",     desc: "A cute little purple octopus" },
+      pl: { name: "Fioletowa ośmiorniczka",  desc: "Słodka, mała fioletowa ośmiorniczka" },
+      ar: { name: "أخطبوط بنفسجي صغير",       desc: "أخطبوط بنفسجي صغير ولطيف" } },
+
+    { id: 14, price: 10, img: "whitesmalloctopus.jpeg", badge: null,
+      en: { name: "White tiny octopus",      desc: "A cute little white octopus" },
+      pl: { name: "Biała ośmiorniczka",      desc: "Słodka, mała biała ośmiorniczka" },
+      ar: { name: "أخطبوط أبيض صغير",         desc: "أخطبوط أبيض صغير ولطيف" } },
+
+    { id: 15, price: 10, img: "brownsmalloctopus.jpeg", badge: null,
+      en: { name: "Brown tiny octopus",      desc: "A cute little brown octopus" },
+      pl: { name: "Brązowa ośmiorniczka",    desc: "Słodka, mała brązowa ośmiorniczka" },
+      ar: { name: "أخطبوط بني صغير",          desc: "أخطبوط بني صغير ولطيف" } },
+  ];
+
+  // ═══════════════════════════════════════════════════════
+  //  STATE + RENDERING
+  // ═══════════════════════════════════════════════════════
+  let currentLang = 'en';
   let currentProduct = null;
 
-  // ── Render grid ──
-  const grid = document.getElementById('shopGrid');
-  products.forEach(p => {
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = `
-      ${p.badge ? `<div class="card-badge">${p.badge}</div>` : ''}
-      <div class="card-img-wrapper">
-        <img class="card-img" src="${p.img}" alt="${p.name}" onerror="this.style.minHeight='200px'" />
-      </div>
-      <div class="card-body">
-        <div class="card-name">${p.name}</div>
-        <div class="card-desc">${p.desc}</div>
-        <div class="card-footer">
-          <div class="price">${p.price} <span>SAR</span></div>
-          <button class="btn-order" onclick="openModal(${p.id})">Order 🛍️</button>
-        </div>
-      </div>`;
-    grid.appendChild(card);
-  });
+  function t()     { return i18n[currentLang]; }
+  function pt(p)   { return p[currentLang] || p.en; }
 
-  // ── Modal ──
-  function openModal(id) {
+  function renderGrid() {
+    const grid = document.getElementById('shopGrid');
+    grid.innerHTML = '';
+    const tr = t();
+    products.forEach(p => {
+      const loc = pt(p);
+      const card = document.createElement('div');
+      card.className = 'card';
+      let badgeText = '';
+      if (p.badge === 'new')  badgeText = tr.badgeNew;
+      if (p.badge === 'fave') badgeText = tr.badgeFave;
+      card.innerHTML = `
+        ${badgeText ? `<div class="card-badge">${badgeText}</div>` : ''}
+        <div class="card-img-wrapper">
+          <img class="card-img" src="${p.img}" alt="${loc.name}" onerror="this.style.minHeight='200px'" />
+        </div>
+        <div class="card-body">
+          <div class="card-name">${loc.name}</div>
+          <div class="card-desc">${loc.desc}</div>
+          <div class="card-footer">
+            <div class="price">${p.price} <span>${tr.sarSuffix}</span></div>
+            <button class="btn-order" onclick="openModal(${p.id})">${tr.orderBtn}</button>
+          </div>
+        </div>`;
+      grid.appendChild(card);
+    });
+  }
+
+  function applyLang() {
+    const tr = t();
+    // html element attributes
+    const html = document.documentElement;
+    html.setAttribute('lang', currentLang);
+    html.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
+
+    // static strings
+    document.title = tr.title + ' 🧶';
+    document.getElementById('siteTitle').textContent     = tr.title;
+    document.getElementById('siteTagline').textContent   = tr.tagline;
+    document.getElementById('sectionTitle').textContent  = tr.sectionTitle;
+    document.getElementById('btnClose').textContent      = tr.backBtn;
+    document.getElementById('btnOrderModal').textContent = tr.wantBtn;
+    document.getElementById('footerTop').innerHTML       = tr.footerHtml;
+    document.getElementById('footerContactLabel').textContent = tr.footerContact;
+    document.getElementById('footerContactSmall').textContent = tr.footerSmall;
+    document.getElementById('footerBottom').innerHTML    = tr.footerBottom;
+
+    // switcher active state
+    document.querySelectorAll('.lang-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.lang === currentLang);
+    });
+
+    // re-render product grid
+    renderGrid();
+
+    // if modal is open, refresh its content
+    if (currentProduct) openModal(currentProduct.id, true);
+  }
+
+  function setLang(lang) {
+    if (!i18n[lang]) return;
+    currentLang = lang;
+    applyLang();
+  }
+
+  // ═══════════════════════════════════════════════════════
+  //  MODAL
+  // ═══════════════════════════════════════════════════════
+  function openModal(id, keepOpen) {
     currentProduct = products.find(p => p.id === id);
+    if (!currentProduct) return;
+    const loc = pt(currentProduct);
+    const tr  = t();
     document.getElementById('modalImg').src   = currentProduct.img;
-    document.getElementById('modalImg').alt   = currentProduct.name;
-    document.getElementById('modalName').textContent  = currentProduct.name;
-    document.getElementById('modalDesc').textContent  = currentProduct.desc;
-    document.getElementById('modalPrice').textContent = currentProduct.price + ' SAR';
-    document.getElementById('modalOverlay').classList.add('open');
+    document.getElementById('modalImg').alt   = loc.name;
+    document.getElementById('modalName').textContent  = loc.name;
+    document.getElementById('modalDesc').textContent  = loc.desc;
+    document.getElementById('modalPrice').textContent = currentProduct.price + ' ' + tr.sarSuffix;
+    if (!keepOpen) document.getElementById('modalOverlay').classList.add('open');
   }
   function closeModal() {
     document.getElementById('modalOverlay').classList.remove('open');
@@ -519,19 +752,25 @@ const products = [
   });
 
   function orderItem() {
+    const tr = t();
+    const name = currentProduct ? pt(currentProduct).name : tr.toastFallback;
     closeModal();
-    showToast(`✨ Great choice! Please contact us to order "${currentProduct ? currentProduct.name : 'this item'}"`);
+    showToast(tr.toast(name));
   }
 
-  // ── Toast ──
+  // ═══════════════════════════════════════════════════════
+  //  TOAST
+  // ═══════════════════════════════════════════════════════
   function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3800);
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 3800);
   }
 
-  // ── Floating yarn balls ──
+  // ═══════════════════════════════════════════════════════
+  //  FLOATING YARN DECORATION
+  // ═══════════════════════════════════════════════════════
   const colors = ['#b39ddb','#90caf9','#ce93d8','#80cbc4','#f48fb1','#fff176'];
   const container = document.getElementById('floaters');
   for (let i = 0; i < 18; i++) {
@@ -548,6 +787,9 @@ const products = [
     `;
     container.appendChild(el);
   }
+
+  // Init
+  applyLang();
 </script>
 </body>
 </html>
