@@ -41,7 +41,9 @@
     html[lang="ar"] .tagline,
     html[lang="ar"] footer,
     html[lang="ar"] .toast,
-    html[lang="ar"] .card-badge {
+    html[lang="ar"] .card-badge,
+    html[lang="ar"] .basket-toggle,
+    html[lang="ar"] .basket-item-title {
       font-family: 'Cairo', 'Nunito', sans-serif;
     }
     html[lang="ar"] header h1 {
@@ -94,7 +96,7 @@
       100% { transform: translateY(-20vh) rotate(720deg); }
     }
 
-    /* ─── Language switcher ─── */
+    /* ─── Top Controls (Lang & Basket) ─── */
     .lang-switcher {
       position: fixed;
       top: 18px;
@@ -131,10 +133,44 @@
     }
     .lang-btn.ar-btn { font-family: 'Cairo', sans-serif; font-size: 0.95rem; }
 
+    .basket-toggle {
+      position: fixed;
+      top: 18px;
+      left: 18px;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #ffffffdd;
+      backdrop-filter: blur(10px);
+      border: 2px solid var(--lavender);
+      border-radius: 99px;
+      padding: 8px 16px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--purple);
+      cursor: pointer;
+      box-shadow: 0 4px 16px #7e57c22a;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    html[dir="rtl"] .basket-toggle { left: auto; right: 18px; }
+    .basket-toggle:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px #7e57c244;
+    }
+    .basket-badge {
+      background: var(--accent);
+      color: white;
+      border-radius: 99px;
+      padding: 2px 8px;
+      font-size: 0.8rem;
+    }
+
     /* ─── Header / Hero ─── */
     header {
       text-align: center;
-      padding: 60px 20px 40px;
+      padding: 70px 20px 40px;
       position: relative;
     }
     .logo-yarn {
@@ -281,7 +317,6 @@
       font-weight: 800;
       color: var(--purple);
       letter-spacing: -0.5px;
-      /* Keep price number LTR even in RTL */
       direction: ltr;
       unicode-bidi: isolate;
     }
@@ -334,6 +369,9 @@
       overflow: hidden;
       box-shadow: 0 24px 60px #3a1f6e44;
       animation: popIn 0.3s cubic-bezier(.34,1.56,.64,1);
+      display: flex;
+      flex-direction: column;
+      max-height: 90vh;
     }
     @keyframes popIn {
       from { transform: scale(0.7); opacity: 0; }
@@ -345,8 +383,9 @@
       object-fit: cover;
       background: linear-gradient(135deg, #e8d5ff, #d0e8ff);
       display: block;
+      flex-shrink: 0;
     }
-    .modal-body { padding: 26px 28px 30px; }
+    .modal-body { padding: 26px 28px 30px; overflow-y: auto; }
     .modal-body h2 {
       font-family: 'Pacifico', cursive;
       font-size: 1.7rem;
@@ -368,7 +407,7 @@
       unicode-bidi: isolate;
     }
     html[dir="rtl"] .modal-price { text-align: right; }
-    .modal-actions { display: flex; gap: 12px; }
+    .modal-actions { display: flex; gap: 12px; margin-top: auto; }
     .btn-close {
       background: var(--cream);
       color: var(--text-light);
@@ -398,6 +437,41 @@
       transition: transform 0.2s, box-shadow 0.2s;
     }
     .btn-order-modal:hover { transform: scale(1.04); box-shadow: 0 8px 24px #7e57c255; }
+
+    /* ─── Basket Items ─── */
+    .basket-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px dashed var(--lavender);
+    }
+    .basket-item:last-child { border-bottom: none; }
+    .basket-item-img {
+      width: 60px; height: 60px;
+      border-radius: 14px; object-fit: cover;
+      background: var(--cream);
+    }
+    .basket-item-info { flex: 1; }
+    .basket-item-title { font-weight: 800; font-size: 1rem; color: var(--text); margin-bottom: 4px;}
+    .basket-item-price { font-size: 0.9rem; color: var(--text-light); font-weight: 700; direction: ltr; unicode-bidi: isolate;}
+    html[dir="rtl"] .basket-item-price { text-align: right; }
+    .basket-item-qty { font-weight: 800; color: var(--purple); }
+    .basket-item-remove {
+      background: none; border: none; color: #ff5252;
+      font-size: 1.4rem; cursor: pointer; padding: 4px;
+      transition: transform 0.2s;
+    }
+    .basket-item-remove:hover { transform: scale(1.2); }
+    .basket-total {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 16px; padding-top: 20px; border-top: 2px solid var(--lavender);
+      font-size: 1.4rem; font-weight: 800; color: var(--deep-purple);
+    }
+    .basket-total-amount { direction: ltr; unicode-bidi: isolate; }
+    .empty-basket {
+      text-align: center; color: var(--text-light); font-weight: 700; padding: 40px 0;
+    }
 
     /* ─── Toast ─── */
     .toast {
@@ -455,12 +529,18 @@
       .lang-switcher { top: 10px; right: 10px; padding: 3px; }
       html[dir="rtl"] .lang-switcher { right: auto; left: 10px; }
       .lang-btn { padding: 5px 10px; font-size: 0.75rem; }
+      .basket-toggle { top: 10px; left: 10px; padding: 6px 12px; font-size: 0.9rem;}
+      html[dir="rtl"] .basket-toggle { left: auto; right: 10px; }
     }
   </style>
 </head>
 <body>
 
 <div class="floaters" id="floaters"></div>
+
+<button class="basket-toggle" onclick="openBasketModal()">
+  🛒 <span class="basket-badge" id="basketCount">0</span>
+</button>
 
 <div class="lang-switcher">
   <button class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
@@ -489,7 +569,26 @@
       <div class="modal-price" id="modalPrice"></div>
       <div class="modal-actions">
         <button class="btn-close" id="btnClose" onclick="closeModal()">← Back</button>
-        <button class="btn-order-modal" id="btnOrderModal" onclick="orderItem()">🛍️ I Want This!</button>
+        <button class="btn-order-modal" id="btnOrderModal" onclick="addToBasketFromModal()">🛒 Add to Basket</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="basketOverlay">
+  <div class="modal">
+    <div class="modal-body">
+      <h2 id="basketTitleUI">Your Basket</h2>
+      <div id="basketItemsList"></div>
+      
+      <div class="basket-total" id="basketTotalContainer" style="display: none;">
+        <span id="basketTotalLabel">Total:</span>
+        <span class="basket-total-amount" id="basketTotalAmount"></span>
+      </div>
+      
+      <div class="modal-actions" style="margin-top: 24px;">
+        <button class="btn-close" id="btnBasketClose" onclick="closeBasketModal()">← Back</button>
+        <button class="btn-order-modal" id="btnBasketCheckout" onclick="checkout()" style="display: none;">Order Items</button>
       </div>
     </div>
   </div>
@@ -518,11 +617,15 @@
       title:           "Oliwia's Crochet Corner",
       tagline:         "Handmade with love, one stitch at a time ✨",
       sectionTitle:    "My Creations",
-      orderBtn:        "Order 🛍️",
+      viewBtn:         "View 👀",
       backBtn:         "← Back",
-      wantBtn:         "🛍️ I Want This!",
-      toast:           (name) => `✨ Great choice! Please contact us to order "${name}"`,
-      toastFallback:   "this item",
+      addBtn:          "🛒 Add to Basket",
+      basketTitle:     "Your Basket",
+      basketTotal:     "Total:",
+      basketEmpty:     "Your basket is empty 🧶",
+      checkoutBtn:     "Order Items 🛍️",
+      toastAdded:      (name) => `✨ Added "${name}" to basket!`,
+      toastCheckout:   "Great! Please contact us with your basket details to order.",
       sarSuffix:       "SAR",
       badgeNew:        "New",
       badgeFave:       "Fave ⭐",
@@ -535,11 +638,15 @@
       title:           "Kącik Szydełkowy Oliwii",
       tagline:         "Robione z miłością, oczko po oczku ✨",
       sectionTitle:    "Moje Dzieła",
-      orderBtn:        "Zamów 🛍️",
+      viewBtn:         "Zobacz 👀",
       backBtn:         "← Wstecz",
-      wantBtn:         "🛍️ Chcę To!",
-      toast:           (name) => `✨ Świetny wybór! Skontaktuj się z nami, aby zamówić „${name}"`,
-      toastFallback:   "ten produkt",
+      addBtn:          "🛒 Dodaj do koszyka",
+      basketTitle:     "Twój Koszyk",
+      basketTotal:     "Razem:",
+      basketEmpty:     "Twój koszyk jest pusty 🧶",
+      checkoutBtn:     "Zamów produkty 🛍️",
+      toastAdded:      (name) => `✨ Dodano „${name}” do koszyka!`,
+      toastCheckout:   "Świetnie! Skontaktuj się z nami, aby złożyć zamówienie.",
       sarSuffix:       "SAR",
       badgeNew:        "Nowość",
       badgeFave:       "Ulubione ⭐",
@@ -552,11 +659,15 @@
       title:           "ركن أوليفيا للكروشيه",
       tagline:         "✨ مصنوع يدويًا بحب، غرزة تلو الأخرى",
       sectionTitle:    "إبداعاتي",
-      orderBtn:        "🛍️ اطلب",
+      viewBtn:         "عرض 👀",
       backBtn:         "رجوع →",
-      wantBtn:         "🛍️ أريد هذا!",
-      toast:           (name) => `✨ اختيار رائع! يُرجى التواصل معنا لطلب "${name}"`,
-      toastFallback:   "هذه القطعة",
+      addBtn:          "🛒 أضف إلى السلة",
+      basketTitle:     "سلة التسوق",
+      basketTotal:     "المجموع:",
+      basketEmpty:     "سلتك فارغة 🧶",
+      checkoutBtn:     "اطلب المنتجات 🛍️",
+      toastAdded:      (name) => `✨ تمت إضافة "${name}" إلى السلة!`,
+      toastCheckout:   "رائع! يُرجى التواصل معنا بتفاصيل سلتك للطلب.",
       sarSuffix:       "ر.س",
       badgeNew:        "جديد",
       badgeFave:       "المفضلة ⭐",
@@ -568,7 +679,7 @@
   };
 
   // ═══════════════════════════════════════════════════════
-  //  PRODUCTS — translations embedded per language
+  //  PRODUCTS
   // ═══════════════════════════════════════════════════════
   const products = [
     { id: 0, price: 20, img: "custom_design.jpeg", badge: "new",
@@ -579,7 +690,7 @@
     { id: 1, price: 10, img: "mushroomwithfroghat.jpeg", badge: "new",
       en: { name: "Mushroom with froghat",   desc: "A nice little mushroom with a froghat" },
       pl: { name: "Grzybek z żabką",         desc: "Słodki grzybek w czapce żabki" },
-      ar: { name: "فطر بقبعة ضفدع",            desc: "فطر صغير لطيف بقبعة ضفدع" } },
+      ar: { name: "فطر بقبعة ضفدع",             desc: "فطر صغير لطيف بقبعة ضفدع" } },
 
     { id: 2, price: 10, img: "watermeloncatred.jpeg", badge: null,
       en: { name: "Watermelon Cat (red)",    desc: "A cute little red Watermelon cat" },
@@ -657,6 +768,7 @@
   // ═══════════════════════════════════════════════════════
   let currentLang = 'en';
   let currentProduct = null;
+  let basket = [];
 
   function t()     { return i18n[currentLang]; }
   function pt(p)   { return p[currentLang] || p.en; }
@@ -674,15 +786,15 @@
       if (p.badge === 'fave') badgeText = tr.badgeFave;
       card.innerHTML = `
         ${badgeText ? `<div class="card-badge">${badgeText}</div>` : ''}
-        <div class="card-img-wrapper">
+        <div class="card-img-wrapper" onclick="openModal(${p.id})">
           <img class="card-img" src="${p.img}" alt="${loc.name}" onerror="this.style.minHeight='200px'" />
         </div>
         <div class="card-body">
-          <div class="card-name">${loc.name}</div>
-          <div class="card-desc">${loc.desc}</div>
+          <div class="card-name" onclick="openModal(${p.id})">${loc.name}</div>
+          <div class="card-desc" onclick="openModal(${p.id})">${loc.desc}</div>
           <div class="card-footer">
             <div class="price">${p.price} <span>${tr.sarSuffix}</span></div>
-            <button class="btn-order" onclick="openModal(${p.id})">${tr.orderBtn}</button>
+            <button class="btn-order" onclick="openModal(${p.id})">${tr.viewBtn}</button>
           </div>
         </div>`;
       grid.appendChild(card);
@@ -698,25 +810,32 @@
 
     // static strings
     document.title = tr.title + ' 🧶';
-    document.getElementById('siteTitle').textContent     = tr.title;
-    document.getElementById('siteTagline').textContent   = tr.tagline;
-    document.getElementById('sectionTitle').textContent  = tr.sectionTitle;
-    document.getElementById('btnClose').textContent      = tr.backBtn;
-    document.getElementById('btnOrderModal').textContent = tr.wantBtn;
-    document.getElementById('footerTop').innerHTML       = tr.footerHtml;
+    document.getElementById('siteTitle').textContent      = tr.title;
+    document.getElementById('siteTagline').textContent    = tr.tagline;
+    document.getElementById('sectionTitle').textContent   = tr.sectionTitle;
+    document.getElementById('btnClose').textContent       = tr.backBtn;
+    document.getElementById('btnOrderModal').textContent  = tr.addBtn;
+    
+    document.getElementById('basketTitleUI').textContent  = tr.basketTitle;
+    document.getElementById('basketTotalLabel').textContent = tr.basketTotal;
+    document.getElementById('btnBasketClose').textContent = tr.backBtn;
+    document.getElementById('btnBasketCheckout').textContent = tr.checkoutBtn;
+
+    document.getElementById('footerTop').innerHTML        = tr.footerHtml;
     document.getElementById('footerContactLabel').textContent = tr.footerContact;
     document.getElementById('footerContactSmall').textContent = tr.footerSmall;
-    document.getElementById('footerBottom').innerHTML    = tr.footerBottom;
+    document.getElementById('footerBottom').innerHTML     = tr.footerBottom;
 
     // switcher active state
     document.querySelectorAll('.lang-btn').forEach(b => {
       b.classList.toggle('active', b.dataset.lang === currentLang);
     });
 
-    // re-render product grid
+    // re-render dynamic sections
     renderGrid();
+    renderBasketUI();
 
-    // if modal is open, refresh its content
+    // if product modal is open, refresh its content
     if (currentProduct) openModal(currentProduct.id, true);
   }
 
@@ -727,7 +846,7 @@
   }
 
   // ═══════════════════════════════════════════════════════
-  //  MODAL
+  //  PRODUCT MODAL
   // ═══════════════════════════════════════════════════════
   function openModal(id, keepOpen) {
     currentProduct = products.find(p => p.id === id);
@@ -749,21 +868,108 @@
     if (e.target === e.currentTarget) closeModal();
   });
 
-  function orderItem() {
+  // ═══════════════════════════════════════════════════════
+  //  BASKET LOGIC
+  // ═══════════════════════════════════════════════════════
+  function addToBasketFromModal() {
+    if (!currentProduct) return;
+    const existingItem = basket.find(item => item.id === currentProduct.id);
+    if (existingItem) {
+      existingItem.qty++;
+    } else {
+      basket.push({ id: currentProduct.id, qty: 1 });
+    }
+    
     const tr = t();
-    const name = currentProduct ? pt(currentProduct).name : tr.toastFallback;
+    const locName = pt(currentProduct).name;
+    
     closeModal();
-    showToast(tr.toast(name));
+    updateBasketCount();
+    renderBasketUI();
+    showToast(tr.toastAdded(locName));
+  }
+
+  function removeFromBasket(id) {
+    basket = basket.filter(item => item.id !== id);
+    updateBasketCount();
+    renderBasketUI();
+  }
+
+  function updateBasketCount() {
+    const count = basket.reduce((sum, item) => sum + item.qty, 0);
+    document.getElementById('basketCount').textContent = count;
+  }
+
+  function renderBasketUI() {
+    const list = document.getElementById('basketItemsList');
+    const totalContainer = document.getElementById('basketTotalContainer');
+    const checkoutBtn = document.getElementById('btnBasketCheckout');
+    const totalAmount = document.getElementById('basketTotalAmount');
+    const tr = t();
+
+    list.innerHTML = '';
+
+    if (basket.length === 0) {
+      list.innerHTML = `<div class="empty-basket">${tr.basketEmpty}</div>`;
+      totalContainer.style.display = 'none';
+      checkoutBtn.style.display = 'none';
+      return;
+    }
+
+    let total = 0;
+    basket.forEach(item => {
+      const product = products.find(p => p.id === item.id);
+      if(!product) return;
+      const loc = pt(product);
+      total += product.price * item.qty;
+
+      const div = document.createElement('div');
+      div.className = 'basket-item';
+      div.innerHTML = `
+        <img src="${product.img}" alt="" class="basket-item-img" onerror="this.style.display='none'" />
+        <div class="basket-item-info">
+          <div class="basket-item-title">${loc.name}</div>
+          <div class="basket-item-price">
+            ${product.price} ${tr.sarSuffix} 
+            <span class="basket-item-qty">x ${item.qty}</span>
+          </div>
+        </div>
+        <button class="basket-item-remove" onclick="removeFromBasket(${product.id})">🗑️</button>
+      `;
+      list.appendChild(div);
+    });
+
+    totalAmount.textContent = `${total} ${tr.sarSuffix}`;
+    totalContainer.style.display = 'flex';
+    checkoutBtn.style.display = 'block';
+  }
+
+  function openBasketModal() {
+    document.getElementById('basketOverlay').classList.add('open');
+  }
+  function closeBasketModal() {
+    document.getElementById('basketOverlay').classList.remove('open');
+  }
+  document.getElementById('basketOverlay').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeBasketModal();
+  });
+
+  function checkout() {
+    const tr = t();
+    closeBasketModal();
+    showToast(tr.toastCheckout);
   }
 
   // ═══════════════════════════════════════════════════════
   //  TOAST
   // ═══════════════════════════════════════════════════════
+  let toastTimer;
   function showToast(msg) {
     const el = document.getElementById('toast');
     el.textContent = msg;
     el.classList.add('show');
-    setTimeout(() => el.classList.remove('show'), 3800);
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('show'), 3800);
   }
 
   // ═══════════════════════════════════════════════════════
