@@ -43,7 +43,8 @@
     html[lang="ar"] .toast,
     html[lang="ar"] .card-badge,
     html[lang="ar"] .basket-toggle,
-    html[lang="ar"] .basket-item-title {
+    html[lang="ar"] .basket-item-title,
+    html[lang="ar"] .custom-note-input {
       font-family: 'Cairo', 'Nunito', sans-serif;
     }
     html[lang="ar"] header h1 {
@@ -398,6 +399,26 @@
       margin-bottom: 20px;
       font-size: 0.97rem;
     }
+    .custom-note-input {
+      width: 100%;
+      margin-bottom: 20px;
+      padding: 12px 16px;
+      border: 2px solid var(--lavender);
+      border-radius: 14px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      color: var(--text);
+      resize: vertical;
+      min-height: 80px;
+      display: none;
+      background: var(--cream);
+    }
+    .custom-note-input:focus {
+      outline: none;
+      border-color: var(--purple);
+      box-shadow: 0 0 0 3px #7e57c233;
+      background: white;
+    }
     .modal-price {
       font-size: 2rem;
       font-weight: 800;
@@ -451,11 +472,24 @@
       width: 60px; height: 60px;
       border-radius: 14px; object-fit: cover;
       background: var(--cream);
+      flex-shrink: 0;
     }
-    .basket-item-info { flex: 1; }
+    .basket-item-info { flex: 1; min-width: 0; }
     .basket-item-title { font-weight: 800; font-size: 1rem; color: var(--text); margin-bottom: 4px;}
     .basket-item-price { font-size: 0.9rem; color: var(--text-light); font-weight: 700; direction: ltr; unicode-bidi: isolate;}
     html[dir="rtl"] .basket-item-price { text-align: right; }
+    .basket-item-note {
+      font-size: 0.8rem;
+      color: var(--text-light);
+      margin-top: 4px;
+      font-style: italic;
+      background: var(--cream);
+      padding: 4px 8px;
+      border-radius: 6px;
+      display: inline-block;
+      max-width: 100%;
+      word-wrap: break-word;
+    }
     
     /* Quantity Controls */
     .basket-controls {
@@ -588,6 +622,9 @@
     <div class="modal-body">
       <h2 id="modalName"></h2>
       <p id="modalDesc"></p>
+      
+      <textarea id="modalCustomNote" class="custom-note-input" placeholder="..."></textarea>
+      
       <div class="modal-price" id="modalPrice"></div>
       <div class="modal-actions">
         <button class="btn-close" id="btnClose" onclick="closeModal()">← Back</button>
@@ -654,6 +691,11 @@
       footerContact:   "📱 To order, contact us at:",
       footerSmall:     "We'll arrange pickup & payment",
       footerBottom:    "Made with yarn &amp; joy · Thuwal, Saudi Arabia",
+      
+      // Custom Order Text
+      customPlaceholder: "Describe your custom design here...",
+      noteLabel:       "Note:",
+      
       // WhatsApp Order Templates
       orderIntro:      "Hello! I would like to order the following items:\n\n",
       orderOutro:      "Please let me know when it will be ready for pickup! 🧸",
@@ -678,6 +720,11 @@
       footerContact:   "📱 Aby zamówić, skontaktuj się z nami:",
       footerSmall:     "Ustalimy odbiór i płatność",
       footerBottom:    "Zrobione z włóczki i radości · Thuwal, Arabia Saudyjska",
+      
+      // Custom Order Text
+      customPlaceholder: "Opisz swój projekt tutaj...",
+      noteLabel:       "Wiadomość:",
+      
       // WhatsApp Order Templates
       orderIntro:      "Cześć! Chciał(a)bym zamówić następujące rzeczy:\n\n",
       orderOutro:      "Proszę o informację, kiedy zamówienie będzie gotowe do odbioru! 🧸",
@@ -702,6 +749,11 @@
       footerContact:   "📱 للطلب، تواصل معنا على:",
       footerSmall:     "سنُرتب الاستلام والدفع",
       footerBottom:    "مصنوع بالغزل والفرح · ثول، المملكة العربية السعودية",
+      
+      // Custom Order Text
+      customPlaceholder: "صف تصميمك المخصص هنا...",
+      noteLabel:       "ملاحظة:",
+      
       // WhatsApp Order Templates
       orderIntro:      "مرحباً! أود طلب العناصر التالية:\n\n",
       orderOutro:      "الرجاء إعلامي عندما يكون الطلب جاهزاً للاستلام! 🧸",
@@ -713,7 +765,7 @@
   //  PRODUCTS
   // ═══════════════════════════════════════════════════════
   const products = [
-    { id: 0, price: 20, img: "custom_design.jpeg", badge: "new",
+    { id: 0, price: 20, img: "custom_design.jpeg", badge: "new", isCustom: true,
       en: { name: "Your custom order",       desc: "Have a specific design in mind? Let's make it!" },
       pl: { name: "Twoje zamówienie",        desc: "Masz w głowie konkretny projekt? Zróbmy go!" },
       ar: { name: "طلبك المخصص",             desc: "هل لديك تصميم معين في ذهنك؟ دعنا نصنعه!" } },
@@ -799,6 +851,7 @@
   // ═══════════════════════════════════════════════════════
   let currentLang = 'en';
   let currentProduct = null;
+  // basket item structure: { basketId: string, productId: number, qty: number, note: string }
   let basket = [];
 
   function t()     { return i18n[currentLang]; }
@@ -862,6 +915,10 @@
       b.classList.toggle('active', b.dataset.lang === currentLang);
     });
 
+    // update textarea placeholder if visible
+    const noteInput = document.getElementById('modalCustomNote');
+    noteInput.placeholder = tr.customPlaceholder;
+
     // re-render dynamic sections
     renderGrid();
     renderBasketUI();
@@ -884,17 +941,32 @@
     if (!currentProduct) return;
     const loc = pt(currentProduct);
     const tr  = t();
+    
     document.getElementById('modalImg').src   = currentProduct.img;
     document.getElementById('modalImg').alt   = loc.name;
     document.getElementById('modalName').textContent  = loc.name;
     document.getElementById('modalDesc').textContent  = loc.desc;
     document.getElementById('modalPrice').textContent = currentProduct.price + ' ' + tr.sarSuffix;
+    
+    // Handle Custom Note input
+    const noteInput = document.getElementById('modalCustomNote');
+    if (currentProduct.isCustom) {
+      noteInput.style.display = 'block';
+      noteInput.placeholder = tr.customPlaceholder;
+      if (!keepOpen) noteInput.value = ''; // Reset only if opening fresh
+    } else {
+      noteInput.style.display = 'none';
+      noteInput.value = '';
+    }
+
     if (!keepOpen) document.getElementById('modalOverlay').classList.add('open');
   }
+
   function closeModal() {
     document.getElementById('modalOverlay').classList.remove('open');
     currentProduct = null;
   }
+
   document.getElementById('modalOverlay').addEventListener('click', e => {
     if (e.target === e.currentTarget) closeModal();
   });
@@ -904,11 +976,22 @@
   // ═══════════════════════════════════════════════════════
   function addToBasketFromModal() {
     if (!currentProduct) return;
-    const existingItem = basket.find(item => item.id === currentProduct.id);
+    
+    const noteInput = document.getElementById('modalCustomNote');
+    const customNote = currentProduct.isCustom ? noteInput.value.trim() : "";
+    
+    // Group items if they have the exact same product ID and identical custom note
+    const existingItem = basket.find(item => item.productId === currentProduct.id && item.note === customNote);
+    
     if (existingItem) {
       existingItem.qty++;
     } else {
-      basket.push({ id: currentProduct.id, qty: 1 });
+      basket.push({ 
+        basketId: Date.now().toString() + Math.random().toString(36).substr(2, 5), // Unique identifier
+        productId: currentProduct.id, 
+        qty: 1,
+        note: customNote
+      });
     }
     
     const tr = t();
@@ -920,14 +1003,14 @@
     showToast(tr.toastAdded(locName));
   }
 
-  function updateQty(id, delta) {
-    const item = basket.find(i => i.id === id);
+  function updateQty(basketId, delta) {
+    const item = basket.find(i => i.basketId === basketId);
     if (!item) return;
     
     item.qty += delta;
     
     if (item.qty <= 0) {
-      basket = basket.filter(i => i.id !== id);
+      basket = basket.filter(i => i.basketId !== basketId);
     }
     
     updateBasketCount();
@@ -957,7 +1040,7 @@
 
     let total = 0;
     basket.forEach(item => {
-      const product = products.find(p => p.id === item.id);
+      const product = products.find(p => p.id === item.productId);
       if(!product) return;
       const loc = pt(product);
       const lineTotal = product.price * item.qty;
@@ -972,11 +1055,12 @@
           <div class="basket-item-price">
             ${lineTotal} ${tr.sarSuffix} 
           </div>
+          ${item.note ? `<div class="basket-item-note"><strong>${tr.noteLabel}</strong> ${item.note}</div>` : ''}
         </div>
         <div class="basket-controls">
-          <button class="qty-btn" onclick="updateQty(${product.id}, -1)">−</button>
+          <button class="qty-btn" onclick="updateQty('${item.basketId}', -1)">−</button>
           <span class="basket-item-qty">${item.qty}</span>
-          <button class="qty-btn" onclick="updateQty(${product.id}, 1)">+</button>
+          <button class="qty-btn" onclick="updateQty('${item.basketId}', 1)">+</button>
         </div>
       `;
       list.appendChild(div);
@@ -1006,13 +1090,14 @@
 
     // Build the itemized list
     basket.forEach(item => {
-      const product = products.find(p => p.id === item.id);
+      const product = products.find(p => p.id === item.productId);
       if (!product) return;
       const loc = pt(product);
       const lineTotal = product.price * item.qty;
       total += lineTotal;
       
-      orderText += `▪ ${item.qty}x ${loc.name} - ${lineTotal} ${tr.sarSuffix}\n`;
+      let noteText = item.note ? `\n   ↳ ${tr.noteLabel} ${item.note}` : "";
+      orderText += `▪ ${item.qty}x ${loc.name} - ${lineTotal} ${tr.sarSuffix}${noteText}\n`;
     });
 
     // Add total and outro
