@@ -460,17 +460,14 @@
 </head>
 <body>
 
-<!-- Floating yarn balls -->
 <div class="floaters" id="floaters"></div>
 
-<!-- ── LANGUAGE SWITCHER ── -->
 <div class="lang-switcher">
   <button class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
   <button class="lang-btn" data-lang="pl" onclick="setLang('pl')">PL</button>
   <button class="lang-btn ar-btn" data-lang="ar" onclick="setLang('ar')">ع</button>
 </div>
 
-<!-- ── HEADER ── -->
 <header>
   <span class="logo-yarn">🧶</span>
   <h1 id="siteTitle">Oliwia's Crochet Corner</h1>
@@ -481,10 +478,8 @@
 
 <p class="section-title" id="sectionTitle">My Creations</p>
 
-<!-- ── PRODUCT GRID ── -->
 <div class="shop-grid" id="shopGrid"></div>
 
-<!-- ── MODAL ── -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
     <img class="modal-img" id="modalImg" src="" alt="" />
@@ -500,10 +495,8 @@
   </div>
 </div>
 
-<!-- ── TOAST ── -->
 <div class="toast" id="toast"></div>
 
-<!-- ── FOOTER ── -->
 <footer id="footer">
   <div id="footerTop">All items are <strong>handmade by Oliwia</strong> 🧸<br/>
   Payment in <strong>cash (SAR)</strong> upon pickup</div>
@@ -578,10 +571,15 @@
   //  PRODUCTS — translations embedded per language
   // ═══════════════════════════════════════════════════════
   const products = [
+    { id: 0, price: 20, img: "custom_design.jpeg", badge: "new",
+      en: { name: "Your custom order",       desc: "Have a specific design in mind? Let's make it!" },
+      pl: { name: "Twoje zamówienie",        desc: "Masz w głowie konkretny projekt? Zróbmy go!" },
+      ar: { name: "طلبك المخصص",             desc: "هل لديك تصميم معين في ذهنك؟ دعنا نصنعه!" } },
+
     { id: 1, price: 10, img: "mushroomwithfroghat.jpeg", badge: "new",
-      en: { name: "Mushroom with froghat",  desc: "A nice little mushroom with a froghat" },
+      en: { name: "Mushroom with froghat",   desc: "A nice little mushroom with a froghat" },
       pl: { name: "Grzybek z żabką",         desc: "Słodki grzybek w czapce żabki" },
-      ar: { name: "فطر بقبعة ضفدع",           desc: "فطر صغير لطيف بقبعة ضفدع" } },
+      ar: { name: "فطر بقبعة ضفدع",            desc: "فطر صغير لطيف بقبعة ضفدع" } },
 
     { id: 2, price: 10, img: "watermeloncatred.jpeg", badge: null,
       en: { name: "Watermelon Cat (red)",    desc: "A cute little red Watermelon cat" },
@@ -611,42 +609,42 @@
     { id: 7, price: 10, img: "colorfulscrunchie.jpeg", badge: null,
       en: { name: "Colorful scrunchie",      desc: "A cheerful colorful scrunchie" },
       pl: { name: "Kolorowa gumka",          desc: "Wesoła, kolorowa gumka do włosów" },
-      ar: { name: "ربطة شعر ملونة",           desc: "ربطة شعر ملونة ومرحة" } },
+      ar: { name: "ربطة شعر ملونة",            desc: "ربطة شعر ملونة ومرحة" } },
 
     { id: 8, price: 10, img: "colorfulaxolotl.jpeg", badge: null,
       en: { name: "Colorful axolotl",        desc: "A cute colorful axolotl" },
       pl: { name: "Kolorowy aksolotl",       desc: "Słodki, kolorowy aksolotl" },
-      ar: { name: "أكسولوتل ملون",            desc: "أكسولوتل ملون ولطيف" } },
+      ar: { name: "أكسولوتل ملون",             desc: "أكسولوتل ملون ولطيف" } },
 
     { id: 9, price: 10, img: "purplescrunchie.jpeg", badge: null,
       en: { name: "Purple scrunchie",        desc: "A soft purple scrunchie" },
       pl: { name: "Fioletowa gumka",         desc: "Miękka, fioletowa gumka do włosów" },
-      ar: { name: "ربطة شعر بنفسجية",         desc: "ربطة شعر بنفسجية ناعمة" } },
+      ar: { name: "ربطة شعر بنفسجية",          desc: "ربطة شعر بنفسجية ناعمة" } },
 
     { id: 10, price: 10, img: "whitescrunchie.jpeg", badge: null,
       en: { name: "White scrunchie",         desc: "A soft white scrunchie" },
       pl: { name: "Biała gumka",             desc: "Miękka, biała gumka do włosów" },
-      ar: { name: "ربطة شعر بيضاء",           desc: "ربطة شعر بيضاء ناعمة" } },
+      ar: { name: "ربطة شعر بيضاء",            desc: "ربطة شعر بيضاء ناعمة" } },
 
     { id: 11, price: 10, img: "brownscrunchie.jpeg", badge: null,
       en: { name: "Brown scrunchie",         desc: "A soft brown scrunchie" },
       pl: { name: "Brązowa gumka",           desc: "Miękka, brązowa gumka do włosów" },
-      ar: { name: "ربطة شعر بنية",            desc: "ربطة شعر بنية ناعمة" } },
+      ar: { name: "ربطة شعر بنية",             desc: "ربطة شعر بنية ناعمة" } },
 
     { id: 12, price: 10, img: "blackscrunchie.jpeg", badge: null,
       en: { name: "Black scrunchie",         desc: "A soft black scrunchie" },
       pl: { name: "Czarna gumka",            desc: "Miękka, czarna gumka do włosów" },
-      ar: { name: "ربطة شعر سوداء",           desc: "ربطة شعر سوداء ناعمة" } },
+      ar: { name: "ربطة شعر سوداء",            desc: "ربطة شعر سوداء ناعمة" } },
 
     { id: 13, price: 10, img: "purplesmalloctopus.jpeg", badge: null,
       en: { name: "Purple tiny octopus",     desc: "A cute little purple octopus" },
       pl: { name: "Fioletowa ośmiorniczka",  desc: "Słodka, mała fioletowa ośmiorniczka" },
-      ar: { name: "أخطبوط بنفسجي صغير",       desc: "أخطبوط بنفسجي صغير ولطيف" } },
+      ar: { name: "أخطبوط بنفسجي صغير",        desc: "أخطبوط بنفسجي صغير ولطيف" } },
 
     { id: 14, price: 10, img: "whitesmalloctopus.jpeg", badge: null,
       en: { name: "White tiny octopus",      desc: "A cute little white octopus" },
       pl: { name: "Biała ośmiorniczka",      desc: "Słodka, mała biała ośmiorniczka" },
-      ar: { name: "أخطبوط أبيض صغير",         desc: "أخطبوط أبيض صغير ولطيف" } },
+      ar: { name: "أخطبوط أبيض صغير",          desc: "أخطبوط أبيض صغير ولطيف" } },
 
     { id: 15, price: 10, img: "brownsmalloctopus.jpeg", badge: null,
       en: { name: "Brown tiny octopus",      desc: "A cute little brown octopus" },
