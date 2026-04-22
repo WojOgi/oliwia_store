@@ -458,25 +458,24 @@
 
 <script>
   // ── Product data (20 items) ──
-  const products = [
-    { id: 1,  name: "Mushroom with froghat",        desc: "A nice little mushroom with a froghat",          price: 10, img: "mushroomwithfroghat.jpeg",  badge: "New" },
-    { id: 2,  name: "Watermelon Cat (red)",  desc: "A cute little red Watermelon cat",        price: 10, img: "watermeloncatred.jpeg",  badge: null },
-    { id: 3,  name: "Watermelon Cat (green)",          desc: "A cheerful green Watermelon cat",             price: 10, img: "watermeloncatgreen.jpeg",  badge: "Fave ⭐" },
-    { id: 4,  name: "Calico Cat",           desc: "A cute colorful cat",        price: 10, img: "calicocat.jpeg",  badge: null },
-    { id: 5,  name: "Gray and pink cat",          desc: "A cute gray and pink cat with a cute smile",                price: 15, img: "grayandpinkcat.jpeg",  badge: null },
-    { id: 6,  name: "Cute tiny cat",       desc: "A cute little tiny cat",             price: 10, img: "", badge: null },
-  { id: 7,  name: "Calico Cat (small)",  desc: "A cute colorful calico cat",         price: 10, img: "", badge: null },
-  { id: 8,  name: "Colorful scrunchie",  desc: "A cheerful colorful scrunchie",      price: 10, img: "", badge: null },
-  { id: 9,  name: "Colorful axolotl",    desc: "A cute colorful axolotl",            price: 10, img: "", badge: null },
-  { id: 10, name: "Purple scrunchie",    desc: "A soft purple scrunchie",            price: 10, img: "", badge: null },
-  { id: 11, name: "White scrunchie",     desc: "A soft white scrunchie",             price: 10, img: "", badge: null },
-  { id: 12, name: "Brown scrunchie",     desc: "A soft brown scrunchie",             price: 10, img: "", badge: null },
-  { id: 13, name: "Black scrunchie",     desc: "A soft black scrunchie",             price: 10, img: "", badge: null },
-  { id: 14, name: "Purple tiny octopus", desc: "A cute little purple octopus",       price: 10, img: "", badge: null },
-  { id: 15, name: "White tiny octopus",  desc: "A cute little white octopus",        price: 10, img: "", badge: null },
-  { id: 16, name: "Brown tiny octopus",  desc: "A cute little brown octopus",        price: 10, img: "", badge: null },
-    
-  ];
+  // — Product data (15 items) —
+const products = [
+  { id: 1,  name: "Mushroom with froghat",  desc: "A nice little mushroom with a froghat",  price: 10, img: "mushroomwithfroghat.jpeg", badge: "New" },
+  { id: 2,  name: "Watermelon Cat (red)",   desc: "A cute little red Watermelon cat",       price: 10, img: "watermeloncatred.jpeg",    badge: null },
+  { id: 3,  name: "Watermelon Cat (green)", desc: "A cheerful green Watermelon cat",        price: 10, img: "watermeloncatgreen.jpeg",  badge: "Fave ⭐" },
+  { id: 4,  name: "Calico Cat",             desc: "A cute colorful cat",                    price: 10, img: "calicocat.jpeg",           badge: null },
+  { id: 5,  name: "Gray and pink cat",      desc: "A cute gray and pink cat with a cute smile", price: 15, img: "grayandpinkcat.jpeg", badge: null },
+  { id: 6,  name: "Cute tiny cat",          desc: "A cute little tiny cat",                 price: 10, img: "cutetinycat.jpeg",         badge: null },
+  { id: 7,  name: "Colorful scrunchie",     desc: "A cheerful colorful scrunchie",          price: 10, img: "colorfulscrunchie.jpeg",   badge: null },
+  { id: 8,  name: "Colorful axolotl",       desc: "A cute colorful axolotl",                price: 10, img: "colorfulaxolotl.jpeg",     badge: null },
+  { id: 9,  name: "Purple scrunchie",       desc: "A soft purple scrunchie",                price: 10, img: "purplescrunchie.jpeg",     badge: null },
+  { id: 10, name: "White scrunchie",        desc: "A soft white scrunchie",                 price: 10, img: "whitescrunchie.jpeg",      badge: null },
+  { id: 11, name: "Brown scrunchie",        desc: "A soft brown scrunchie",                 price: 10, img: "brownscrunchie.jpeg",      badge: null },
+  { id: 12, name: "Black scrunchie",        desc: "A soft black scrunchie",                 price: 10, img: "blackscrunchie.jpeg",      badge: null },
+  { id: 13, name: "Purple tiny octopus",    desc: "A cute little purple octopus",           price: 10, img: "purplesmalloctopus.jpeg",  badge: null },
+  { id: 14, name: "White tiny octopus",     desc: "A cute little white octopus",            price: 10, img: "whitesmalloctopus.jpeg",   badge: null },
+  { id: 15, name: "Brown tiny octopus",     desc: "A cute little brown octopus",            price: 10, img: "brownsmalloctopus.jpeg",   badge: null },
+];
 
   let currentProduct = null;
 
