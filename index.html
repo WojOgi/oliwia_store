@@ -456,13 +456,35 @@
     .basket-item-title { font-weight: 800; font-size: 1rem; color: var(--text); margin-bottom: 4px;}
     .basket-item-price { font-size: 0.9rem; color: var(--text-light); font-weight: 700; direction: ltr; unicode-bidi: isolate;}
     html[dir="rtl"] .basket-item-price { text-align: right; }
-    .basket-item-qty { font-weight: 800; color: var(--purple); }
-    .basket-item-remove {
-      background: none; border: none; color: #ff5252;
-      font-size: 1.4rem; cursor: pointer; padding: 4px;
-      transition: transform 0.2s;
+    
+    /* Quantity Controls */
+    .basket-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--cream);
+      padding: 4px 8px;
+      border-radius: 12px;
+      margin-right: 8px;
     }
-    .basket-item-remove:hover { transform: scale(1.2); }
+    html[dir="rtl"] .basket-controls { margin-right: 0; margin-left: 8px; }
+    .qty-btn {
+      background: white;
+      border: 1px solid var(--lavender);
+      color: var(--purple);
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .qty-btn:hover { background: var(--lavender); color: white; }
+    .basket-item-qty { font-weight: 800; color: var(--deep-purple); min-width: 12px; text-align: center; }
+
     .basket-total {
       display: flex; justify-content: space-between; align-items: center;
       margin-top: 16px; padding-top: 20px; border-top: 2px solid var(--lavender);
@@ -588,7 +610,7 @@
       
       <div class="modal-actions" style="margin-top: 24px;">
         <button class="btn-close" id="btnBasketClose" onclick="closeBasketModal()">← Back</button>
-        <button class="btn-order-modal" id="btnBasketCheckout" onclick="checkout()" style="display: none;">Order Items</button>
+        <button class="btn-order-modal" id="btnBasketCheckout" onclick="checkout()" style="display: none;">Order via WhatsApp 💬</button>
       </div>
     </div>
   </div>
@@ -623,9 +645,8 @@
       basketTitle:     "Your Basket",
       basketTotal:     "Total:",
       basketEmpty:     "Your basket is empty 🧶",
-      checkoutBtn:     "Order Items 🛍️",
+      checkoutBtn:     "Order via WhatsApp 💬",
       toastAdded:      (name) => `✨ Added "${name}" to basket!`,
-      toastCheckout:   "Great! Please contact us with your basket details to order.",
       sarSuffix:       "SAR",
       badgeNew:        "New",
       badgeFave:       "Fave ⭐",
@@ -633,6 +654,10 @@
       footerContact:   "📱 To order, contact us at:",
       footerSmall:     "We'll arrange pickup & payment",
       footerBottom:    "Made with yarn &amp; joy · Thuwal, Saudi Arabia",
+      // WhatsApp Order Templates
+      orderIntro:      "Hello! I would like to order the following items:\n\n",
+      orderOutro:      "Please let me know when it will be ready for pickup! 🧸",
+      orderTotalText:  "Total:"
     },
     pl: {
       title:           "Kącik Szydełkowy Oliwii",
@@ -644,9 +669,8 @@
       basketTitle:     "Twój Koszyk",
       basketTotal:     "Razem:",
       basketEmpty:     "Twój koszyk jest pusty 🧶",
-      checkoutBtn:     "Zamów produkty 🛍️",
+      checkoutBtn:     "Zamów przez WhatsApp 💬",
       toastAdded:      (name) => `✨ Dodano „${name}” do koszyka!`,
-      toastCheckout:   "Świetnie! Skontaktuj się z nami, aby złożyć zamówienie.",
       sarSuffix:       "SAR",
       badgeNew:        "Nowość",
       badgeFave:       "Ulubione ⭐",
@@ -654,6 +678,10 @@
       footerContact:   "📱 Aby zamówić, skontaktuj się z nami:",
       footerSmall:     "Ustalimy odbiór i płatność",
       footerBottom:    "Zrobione z włóczki i radości · Thuwal, Arabia Saudyjska",
+      // WhatsApp Order Templates
+      orderIntro:      "Cześć! Chciał(a)bym zamówić następujące rzeczy:\n\n",
+      orderOutro:      "Proszę o informację, kiedy zamówienie będzie gotowe do odbioru! 🧸",
+      orderTotalText:  "Razem:"
     },
     ar: {
       title:           "ركن أوليفيا للكروشيه",
@@ -665,9 +693,8 @@
       basketTitle:     "سلة التسوق",
       basketTotal:     "المجموع:",
       basketEmpty:     "سلتك فارغة 🧶",
-      checkoutBtn:     "اطلب المنتجات 🛍️",
+      checkoutBtn:     "💬 اطلب عبر واتساب",
       toastAdded:      (name) => `✨ تمت إضافة "${name}" إلى السلة!`,
-      toastCheckout:   "رائع! يُرجى التواصل معنا بتفاصيل سلتك للطلب.",
       sarSuffix:       "ر.س",
       badgeNew:        "جديد",
       badgeFave:       "المفضلة ⭐",
@@ -675,6 +702,10 @@
       footerContact:   "📱 للطلب، تواصل معنا على:",
       footerSmall:     "سنُرتب الاستلام والدفع",
       footerBottom:    "مصنوع بالغزل والفرح · ثول، المملكة العربية السعودية",
+      // WhatsApp Order Templates
+      orderIntro:      "مرحباً! أود طلب العناصر التالية:\n\n",
+      orderOutro:      "الرجاء إعلامي عندما يكون الطلب جاهزاً للاستلام! 🧸",
+      orderTotalText:  "المجموع:"
     }
   };
 
@@ -889,8 +920,16 @@
     showToast(tr.toastAdded(locName));
   }
 
-  function removeFromBasket(id) {
-    basket = basket.filter(item => item.id !== id);
+  function updateQty(id, delta) {
+    const item = basket.find(i => i.id === id);
+    if (!item) return;
+    
+    item.qty += delta;
+    
+    if (item.qty <= 0) {
+      basket = basket.filter(i => i.id !== id);
+    }
+    
     updateBasketCount();
     renderBasketUI();
   }
@@ -921,7 +960,8 @@
       const product = products.find(p => p.id === item.id);
       if(!product) return;
       const loc = pt(product);
-      total += product.price * item.qty;
+      const lineTotal = product.price * item.qty;
+      total += lineTotal;
 
       const div = document.createElement('div');
       div.className = 'basket-item';
@@ -930,11 +970,14 @@
         <div class="basket-item-info">
           <div class="basket-item-title">${loc.name}</div>
           <div class="basket-item-price">
-            ${product.price} ${tr.sarSuffix} 
-            <span class="basket-item-qty">x ${item.qty}</span>
+            ${lineTotal} ${tr.sarSuffix} 
           </div>
         </div>
-        <button class="basket-item-remove" onclick="removeFromBasket(${product.id})">🗑️</button>
+        <div class="basket-controls">
+          <button class="qty-btn" onclick="updateQty(${product.id}, -1)">−</button>
+          <span class="basket-item-qty">${item.qty}</span>
+          <button class="qty-btn" onclick="updateQty(${product.id}, 1)">+</button>
+        </div>
       `;
       list.appendChild(div);
     });
@@ -955,9 +998,34 @@
   });
 
   function checkout() {
+    if (basket.length === 0) return;
     const tr = t();
-    closeBasketModal();
-    showToast(tr.toastCheckout);
+    
+    let orderText = tr.orderIntro;
+    let total = 0;
+
+    // Build the itemized list
+    basket.forEach(item => {
+      const product = products.find(p => p.id === item.id);
+      if (!product) return;
+      const loc = pt(product);
+      const lineTotal = product.price * item.qty;
+      total += lineTotal;
+      
+      orderText += `▪ ${item.qty}x ${loc.name} - ${lineTotal} ${tr.sarSuffix}\n`;
+    });
+
+    // Add total and outro
+    orderText += `\n*${tr.orderTotalText} ${total} ${tr.sarSuffix}*\n\n`;
+    orderText += tr.orderOutro;
+
+    // Format for WhatsApp URL
+    const encodedText = encodeURIComponent(orderText);
+    const phoneNumber = "966544700589"; 
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedText}`;
+
+    // Open WhatsApp in a new tab
+    window.open(whatsappUrl, '_blank');
   }
 
   // ═══════════════════════════════════════════════════════
