@@ -668,9 +668,6 @@
 </footer>
 
 <script>
-  // ═══════════════════════════════════════════════════════
-  //  TRANSLATIONS
-  // ═══════════════════════════════════════════════════════
   const i18n = {
     en: {
       title:           "Oliwia's Crochet Corner",
@@ -691,12 +688,8 @@
       footerContact:   "📱 To order, contact us at:",
       footerSmall:     "We'll arrange pickup & payment",
       footerBottom:    "Made with yarn &amp; joy · Thuwal, Saudi Arabia",
-      
-      // Custom Order Text
       customPlaceholder: "Describe your custom design here...",
       noteLabel:       "Note:",
-      
-      // WhatsApp Order Templates
       orderIntro:      "Hello! I would like to order the following items:\n\n",
       orderOutro:      "Please let me know when it will be ready for pickup! 🧸",
       orderTotalText:  "Total:"
@@ -712,7 +705,7 @@
       basketTotal:     "Razem:",
       basketEmpty:     "Twój koszyk jest pusty 🧶",
       checkoutBtn:     "Zamów przez WhatsApp 💬",
-      toastAdded:      (name) => `✨ Dodano „${name}” do koszyka!`,
+      toastAdded:      (name) => `✨ Dodano „${name}" do koszyka!`,
       sarSuffix:       "SAR",
       badgeNew:        "Nowość",
       badgeFave:       "Ulubione ⭐",
@@ -720,12 +713,8 @@
       footerContact:   "📱 Aby zamówić, skontaktuj się z nami:",
       footerSmall:     "Ustalimy odbiór i płatność",
       footerBottom:    "Zrobione z włóczki i radości · Thuwal, Arabia Saudyjska",
-      
-      // Custom Order Text
       customPlaceholder: "Opisz swój projekt tutaj...",
       noteLabel:       "Wiadomość:",
-      
-      // WhatsApp Order Templates
       orderIntro:      "Cześć! Chciał(a)bym zamówić następujące rzeczy:\n\n",
       orderOutro:      "Proszę o informację, kiedy zamówienie będzie gotowe do odbioru! 🧸",
       orderTotalText:  "Razem:"
@@ -749,26 +738,24 @@
       footerContact:   "📱 للطلب، تواصل معنا على:",
       footerSmall:     "سنُرتب الاستلام والدفع",
       footerBottom:    "مصنوع بالغزل والفرح · ثول، المملكة العربية السعودية",
-      
-      // Custom Order Text
       customPlaceholder: "صف تصميمك المخصص هنا...",
       noteLabel:       "ملاحظة:",
-      
-      // WhatsApp Order Templates
       orderIntro:      "مرحباً! أود طلب العناصر التالية:\n\n",
       orderOutro:      "الرجاء إعلامي عندما يكون الطلب جاهزاً للاستلام! 🧸",
       orderTotalText:  "المجموع:"
     }
   };
 
-  // ═══════════════════════════════════════════════════════
-  //  PRODUCTS
-  // ═══════════════════════════════════════════════════════
   const products = [
     { id: 0, price: 20, img: "custom_design.jpeg", badge: "new", isCustom: true,
-      en: { name: "Your custom order",       desc: "Have a specific design in mind? Let's make it!" },
-      pl: { name: "Twoje zamówienie",        desc: "Masz w głowie konkretny projekt? Zróbmy go!" },
-      ar: { name: "طلبك المخصص",             desc: "هل لديك تصميم معين في ذهنك؟ دعنا نصنعه!" } },
+      en: { name: "Amigurumi Custom Order",        desc: "Have a specific amigurumi design in mind? Let's make it!" },
+      pl: { name: "Zamówienie Amigurumi",           desc: "Masz w głowie konkretny projekt amigurumi? Zróbmy go!" },
+      ar: { name: "طلب أميغورومي مخصص",             desc: "هل لديك تصميم أميغورومي معين في ذهنك؟ دعنا نصنعه!" } },
+
+    { id: 16, price: 20, img: "custom_bottle.jpeg", badge: "new", isCustom: true,
+      en: { name: "Custom Water Bottle Holder",     desc: "A custom crochet holder for your water bottle — pick your colours!" },
+      pl: { name: "Pokrowiec na Bidon",             desc: "Szydełkowy pokrowiec na butelkę na zamówienie — wybierz kolory!" },
+      ar: { name: "حامل زجاجة ماء مخصص",            desc: "حامل كروشيه مخصص لزجاجة الماء — اختر ألوانك!" } },
 
     { id: 1, price: 10, img: "mushroomwithfroghat.jpeg", badge: "new",
       en: { name: "Mushroom with froghat",   desc: "A nice little mushroom with a froghat" },
@@ -846,12 +833,8 @@
       ar: { name: "أخطبوط بني صغير",          desc: "أخطبوط بني صغير ولطيف" } },
   ];
 
-  // ═══════════════════════════════════════════════════════
-  //  STATE + RENDERING
-  // ═══════════════════════════════════════════════════════
   let currentLang = 'en';
   let currentProduct = null;
-  // basket item structure: { basketId: string, productId: number, qty: number, note: string }
   let basket = [];
 
   function t()     { return i18n[currentLang]; }
@@ -887,12 +870,10 @@
 
   function applyLang() {
     const tr = t();
-    // html element attributes
     const html = document.documentElement;
     html.setAttribute('lang', currentLang);
     html.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
 
-    // static strings
     document.title = tr.title + ' 🧶';
     document.getElementById('siteTitle').textContent      = tr.title;
     document.getElementById('siteTagline').textContent    = tr.tagline;
@@ -910,20 +891,16 @@
     document.getElementById('footerContactSmall').textContent = tr.footerSmall;
     document.getElementById('footerBottom').innerHTML     = tr.footerBottom;
 
-    // switcher active state
     document.querySelectorAll('.lang-btn').forEach(b => {
       b.classList.toggle('active', b.dataset.lang === currentLang);
     });
 
-    // update textarea placeholder if visible
     const noteInput = document.getElementById('modalCustomNote');
     noteInput.placeholder = tr.customPlaceholder;
 
-    // re-render dynamic sections
     renderGrid();
     renderBasketUI();
 
-    // if product modal is open, refresh its content
     if (currentProduct) openModal(currentProduct.id, true);
   }
 
@@ -933,9 +910,6 @@
     applyLang();
   }
 
-  // ═══════════════════════════════════════════════════════
-  //  PRODUCT MODAL
-  // ═══════════════════════════════════════════════════════
   function openModal(id, keepOpen) {
     currentProduct = products.find(p => p.id === id);
     if (!currentProduct) return;
@@ -948,12 +922,11 @@
     document.getElementById('modalDesc').textContent  = loc.desc;
     document.getElementById('modalPrice').textContent = currentProduct.price + ' ' + tr.sarSuffix;
     
-    // Handle Custom Note input
     const noteInput = document.getElementById('modalCustomNote');
     if (currentProduct.isCustom) {
       noteInput.style.display = 'block';
       noteInput.placeholder = tr.customPlaceholder;
-      if (!keepOpen) noteInput.value = ''; // Reset only if opening fresh
+      if (!keepOpen) noteInput.value = '';
     } else {
       noteInput.style.display = 'none';
       noteInput.value = '';
@@ -971,23 +944,19 @@
     if (e.target === e.currentTarget) closeModal();
   });
 
-  // ═══════════════════════════════════════════════════════
-  //  BASKET LOGIC
-  // ═══════════════════════════════════════════════════════
   function addToBasketFromModal() {
     if (!currentProduct) return;
     
     const noteInput = document.getElementById('modalCustomNote');
     const customNote = currentProduct.isCustom ? noteInput.value.trim() : "";
     
-    // Group items if they have the exact same product ID and identical custom note
     const existingItem = basket.find(item => item.productId === currentProduct.id && item.note === customNote);
     
     if (existingItem) {
       existingItem.qty++;
     } else {
       basket.push({ 
-        basketId: Date.now().toString() + Math.random().toString(36).substr(2, 5), // Unique identifier
+        basketId: Date.now().toString() + Math.random().toString(36).substr(2, 5),
         productId: currentProduct.id, 
         qty: 1,
         note: customNote
@@ -1088,7 +1057,6 @@
     let orderText = tr.orderIntro;
     let total = 0;
 
-    // Build the itemized list
     basket.forEach(item => {
       const product = products.find(p => p.id === item.productId);
       if (!product) return;
@@ -1100,22 +1068,16 @@
       orderText += `▪ ${item.qty}x ${loc.name} - ${lineTotal} ${tr.sarSuffix}${noteText}\n`;
     });
 
-    // Add total and outro
     orderText += `\n*${tr.orderTotalText} ${total} ${tr.sarSuffix}*\n\n`;
     orderText += tr.orderOutro;
 
-    // Format for WhatsApp URL
     const encodedText = encodeURIComponent(orderText);
     const phoneNumber = "966544700589"; 
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedText}`;
 
-    // Open WhatsApp in a new tab
     window.open(whatsappUrl, '_blank');
   }
 
-  // ═══════════════════════════════════════════════════════
-  //  TOAST
-  // ═══════════════════════════════════════════════════════
   let toastTimer;
   function showToast(msg) {
     const el = document.getElementById('toast');
@@ -1125,9 +1087,6 @@
     toastTimer = setTimeout(() => el.classList.remove('show'), 3800);
   }
 
-  // ═══════════════════════════════════════════════════════
-  //  FLOATING YARN DECORATION
-  // ═══════════════════════════════════════════════════════
   const colors = ['#b39ddb','#90caf9','#ce93d8','#80cbc4','#f48fb1','#fff176'];
   const container = document.getElementById('floaters');
   for (let i = 0; i < 18; i++) {
@@ -1145,7 +1104,6 @@
     container.appendChild(el);
   }
 
-  // Init
   applyLang();
 </script>
 </body>
